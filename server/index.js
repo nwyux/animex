@@ -8,7 +8,7 @@ app.get('/api', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.json({ message: 'The API part is on /api!' });
+    res.json({ message: 'The API part is on /api! prout' });
 });
 
 app.listen(PORT, () => {
