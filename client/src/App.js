@@ -1,10 +1,18 @@
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
 
 
 function App() {
   return (
-    <div className="bg-noir h-screen flex justify-center items-center">
-      <h1 className="text-5xl text-center text-blanc">Animex</h1>
-    </div>
+    <>
+      {/* Navbar */}
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+
+      {/* Footer */}
+    </>
   );
 }
 
