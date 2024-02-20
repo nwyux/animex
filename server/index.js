@@ -1,26 +1,13 @@
 import express from "express";
 import axios from "axios";
+import { userRouter } from "./routes/user.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
-
-// app.get("/api/anime", async (req, res) => {
-//   try {
-//     const response = await axios.get("https://api.jikan.moe/v4/anime/");
-//     res.json(response.data);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
+app.use("/api/auth", userRouter);
 
 app.get("/", (req, res) => {
   res.json({ message: "The API part is on /api!" });
@@ -43,3 +30,5 @@ app.get("/api/characters/:id", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
+
+export {}
