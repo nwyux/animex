@@ -5,10 +5,10 @@ export default function Navbar() {
     <nav className="bg-noir p-4 flex justify-between items-center">
       <h1 className="text-2xl text-blanc">AnimeX</h1>
       <div>
-        <NavLink to="/" className="text-blanc mr-4" activeClassName="underline">
+        <NavLink to="/" className="text-blanc mr-4">
           Home
         </NavLink>
-        <NavLink to="/animes" className="text-blanc" activeClassName="underline">
+        <NavLink to="/animes" className="text-blanc">
           Animes
         </NavLink>
       </div>

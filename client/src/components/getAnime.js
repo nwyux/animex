@@ -60,7 +60,7 @@ export default function Animes() {
     return (
         <div className="bg-noir min-h-screen flex flex-col justify-center items-center">
             <h1 className="text-5xl text-center text-blanc mb-4">AnimeX list of animes</h1>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 p-2 my-4 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {anime.map(anime => (
                     <div key={anime.id} className="relative rounded-lg max-w-sm flex flex-col justify-center items-center">
                         <NavLink to={`/anime/${anime.id}`}>
