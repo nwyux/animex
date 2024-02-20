@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.soloCard{
+    &:hover{
+        box-shadow: 5px 10px 20px 5px rgba(184, 184, 184);
+        scale: 1.015;
+    }
+}
