@@ -33,7 +33,7 @@ export default function Animes() {
     };
 
     return (
-        <div className="bg-noir min-h-screen flex flex-col justify-center items-center">
+        <div className="bg-noir min-h-screen flex flex-col justify-center items-center mt-28">
             <h1 className="text-5xl text-center text-blanc mb-4">AnimeX list of animes</h1>
             <div className="grid grid-cols-1 p-2 my-4 gap-6 md:grid-cols-2 lg:grid-cols-4">
                 {anime.map((anime) => (
