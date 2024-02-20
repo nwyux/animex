@@ -1,15 +1,19 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import AnimesCard from './AnimesCard';
 
 export default function Animes() {
     const [anime, setAnime] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
-    async function fetchAnimeData() {
+    async function fetchAnimeData(page) {
         try {
-            const response = await axios.get('https://kitsu.io/api/edge/anime?page%5Bnumber%5D=1&page%5Bsize%5D=20');
+            const response = await axios.get(`https://kitsu.io/api/edge/anime?page%5Bnumber%5D=${page}&page%5Bsize%5D=20`);
             const animeData = response.data.data;
             setAnime(animeData);
+            setTotalPages(Math.floor(response.data.meta.count / 20));
             console.log(animeData);
         } catch (error) {
             console.error(error);
@@ -17,58 +21,33 @@ export default function Animes() {
     }
 
     useEffect(() => {
-        fetchAnimeData();
-    } , []);
+        fetchAnimeData(currentPage);
+    }, [currentPage]);
 
-    // async function fetchAnimeData() {
-    //     try {
-    //         const response = await axios.get('http://localhost:3001/api/anime');
-    //         const animeData = response.data.data;
-    //         setAnime(animeData);
-    //         console.log(animeData);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }
-    // console.log(anime)
+    const handleNextPage = () => {
+        setCurrentPage((prevPage) => (prevPage < totalPages ? prevPage + 1 : prevPage));
+    };
 
-    // function animeImage() {
-    //     if (anime.images) {
-    //         return anime.images.webp ? anime.images.webp.image_url : anime.images.jpg.image_url;
-    //     }
-    // }
-
-    // async function delayedFetchAnimeData() {
-    //     const itemsPerPage = 25;
-    //     const requestsPerSecond = 2;
-    //     const delayBetweenRequests = 1100 / requestsPerSecond; // milliseconds
-
-    //     for (let page = 1; page <= itemsPerPage; page++) {
-    //         await fetchAnimeData(); // Make the API request
-
-    //         // Delay before making the next API request
-    //         if (page < itemsPerPage) {
-    //             await new Promise(resolve => setTimeout(resolve, delayBetweenRequests));
-    //         }
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     delayedFetchAnimeData();
-    // }, []);
+    const handlePrevPage = () => {
+        setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : prevPage));
+    };
 
     return (
         <div className="bg-noir min-h-screen flex flex-col justify-center items-center">
             <h1 className="text-5xl text-center text-blanc mb-4">AnimeX list of animes</h1>
-            <div className="grid grid-cols-1 p-2 my-4 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {anime.map(anime => (
-                    <div key={anime.id} className="relative rounded-lg max-w-sm flex flex-col justify-center items-center">
-                        <NavLink to={`/anime/${anime.id}`}>
-                        <h2 className="text-blanc text-md font-bold absolute bottom-0 backdrop-blur-xl w-full p-2">{anime.attributes.titles.en_jp}</h2>
-                        <img src={anime.attributes.posterImage.small} alt={anime.title} />
-                        </NavLink>
-                    </div>
+            <div className="grid grid-cols-1 p-2 my-4 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                {anime.map((anime) => (
+                    <AnimesCard key={anime.id} {...anime} />
                 ))}
+            </div>
+            <div className="flex justify-center mt-4 bg-blanc p-2 my-4">
+                <button onClick={handlePrevPage} disabled={currentPage === 1}>
+                    Previous Page
+                </button>
+                <span className="mx-2">{`Page ${currentPage} of ${totalPages}`}</span>
+                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                    Next Page
+                </button>
             </div>
         </div>
     );
