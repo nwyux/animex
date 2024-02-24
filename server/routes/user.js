@@ -42,14 +42,34 @@ export const verifyUser = (req, res, next) => {
   });
 };
 
+export const verifyUserOrAdmin = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user && (req.user.id === req.params.id || req.user.admin === true)) {
+      next();
+    } else {
+      res.sendStatus(403);
+    }
+  });
+};
+
 router.get("/", (req, res) => {
-  res.send("Hello from user routes!");
+  res.json({ message: "Hello from user routes!" });
 });
 
 router.get("/users", verifyToken, verifyAdmin, (req, res) => {
   prisma.user
-    .findMany()
+    .findMany({
+      include: { favorites: true, comments: true }
+    })
     .then((data) => {
+      data.forEach(user => {
+        if (!user.favorites) {
+          user.favorites = [];
+        }
+        if (!user.comments) {
+          user.comments = [];
+        }
+      });
       res.json(data);
     })
     .catch((error) => {
@@ -64,8 +84,15 @@ router.get("/user/:id", verifyToken, verifyUser, (req, res) => {
       where: {
         id: id,
       },
+      include: { favorites: true, comments: true }
     })
     .then((data) => {
+      if (!data.favorites) {
+        data.favorites = [];
+      }
+      if (!data.comments) {
+        data.comments = [];
+      }
       res.json(data);
     })
     .catch((error) => {
@@ -161,12 +188,16 @@ router.put("/user/:id", verifyToken, verifyUser, (req, res) => {
     });
 });
 
-router.delete("/user/:id", verifyToken, verifyUser, (req, res) => {
+router.delete("/user/:id", verifyUserOrAdmin, (req, res) => {
   const { id } = req.params;
   prisma.user
     .delete({
       where: {
         id: id,
+      },
+      include: {
+        favorites: true,
+        comments: true,
       },
     })
     .then((data) => {

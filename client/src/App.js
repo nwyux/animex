@@ -6,7 +6,8 @@ import Animes from "./components/getAnime";
 import SoloAnime from "./components/soloAnime";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import User from "./components/User";
+import User from "./components/user/User";
+import Favorites from "./components/user/Favorites";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/user" element={<User />} />
+        <Route path="/favorites" element={<Favorites />} />
       </Routes>
 
       <Footer />

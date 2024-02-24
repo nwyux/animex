@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import useCookie from "react-use-cookie";
 import axios from "axios";
 import { X } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 export default function User() {
-  const [token] = useCookie("token", "0");
+  const [token, setToken] = useCookie("token", "0");
   const [userData, setUserData] = useState(null);
   const [modalFormUpdateUser, setModalFormUpdateUser] = useState(false);
+  const [modalDeleteUser, setModalDeleteUser] = useState(false);
+  const [username, setUsername] = useState("");
   const [newUsername, setNewUsername] = useState("");
   const [newFirstName, setNewFirstName] = useState("");
   const [newLastName, setNewLastName] = useState("");
@@ -34,6 +37,24 @@ export default function User() {
     } catch (error) {
       console.error("Error updating user:", error);
       // Handle error as needed
+    }
+  }
+
+  async function deleteUser() {
+    try {
+      await axios.delete(
+        `http://localhost:3001/api/auth/user/${window.localStorage.getItem("userID")}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setToken("0");
+      window.localStorage.clear();
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error deleting user:", error);
     }
   }
 
@@ -67,6 +88,34 @@ export default function User() {
 
   return (
     <div className="text-noir sm:text-blanc overflow-hidden flex h-screen relative justify-center items-center">
+      {modalDeleteUser && (
+        <div className="absolute z-20 bg-transparent backdrop-blur-lg bg-opacity-50 top-0 left-0 w-screen h-screen flex justify-center items-center">
+          <X onClick={() => setModalDeleteUser(false)} className="absolute mx-12 right-2 sm:right-24 top-24 cursor-pointer text-blanc" />
+          <div className="flex flex-col justify-center items-center">
+            <h1 className="text-2xl font-semibold text-vertfonce text-center max-w-xs">
+              {userData.username}, are you sure you want to delete your account?
+            </h1>
+            {/* do an input for the user, he needs to retype his username to make the delete account available */}
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Retype your username"
+              className="p-2 rounded-xl bg-vertfonce text-blanc mt-4"
+            />
+            <button
+              onClick={deleteUser}
+              className={`text-blanc p-2 rounded-xl mt-4 ${
+                username !== userData.username ? "cursor-not-allowed bg-gray-600" : "bg-red-500 hover:bg-red-400"
+              }`}
+              disabled={username !== userData.username}
+            >
+              Delete Account
+            </button>
+          </div>
+        </div>
+      )}
+
       {modalFormUpdateUser && (
         <div className="absolute z-20 bg-transparent backdrop-blur-lg bg-opacity-50 top-0 left-0 w-screen h-screen flex justify-center items-center">
           <X onClick={() => setModalFormUpdateUser(false)} className="absolute mx-12 right-2 sm:right-24 top-24 cursor-pointer text-blanc" />
@@ -75,6 +124,7 @@ export default function User() {
               Update Username
               <input
                 type="text"
+                id="newUsername"
                 value={newUsername}
                 onChange={(e) => setNewUsername(e.target.value)}
                 className="mb-4 mt-4 p-2 rounded-xl bg-vertfonce text-blanc"
@@ -85,6 +135,7 @@ export default function User() {
               Update First Name
               <input
                 type="text"
+                id="newFirstName"
                 value={newFirstName}
                 onChange={(e) => setNewFirstName(e.target.value)}
                 className="mb-4 mt-4 p-2 rounded-xl bg-vertfonce text-blanc"
@@ -95,6 +146,7 @@ export default function User() {
               Update Last Name
               <input
                 type="text"
+                id="newLastName"
                 value={newLastName}
                 onChange={(e) => setNewLastName(e.target.value)}
                 className="mb-4 mt-4 p-2 rounded-xl bg-vertfonce text-blanc"
@@ -105,6 +157,7 @@ export default function User() {
               Update Email
               <input
                 type="text"
+                id="newEmail"
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
                 className="mb-4 mt-4 p-2 rounded-xl bg-vertfonce text-blanc"
@@ -115,6 +168,7 @@ export default function User() {
               Update Password
               <input
                 type="password"
+                id="newPassword"
                 placeholder="New Password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
@@ -134,16 +188,26 @@ export default function User() {
       <div className="w-full sm:max-w-2xl p-4 bg-blanc sm:backdrop-blur-sm sm:border-2 sm:border-blanc sm:top-48 sm:bg-transparent absolute top-64 h-screen rounded-[45px]">
          <h1 className="text-2xl font-bold text-center">Welcome {userData.username}</h1>
          <div className="flex flex-col items-center relative">
-           <p>First Name: {userData.firstName}</p>
-           <p>Last Name: {userData.lastName}</p>
-           <p>Email: {userData.email}</p>
            <button
              onClick={() => setModalFormUpdateUser(true)}
              className="bg-vertfonce text-blanc p-2 rounded-xl"
            >
-             Update
+             Update Personal Information
            </button>
 
+            <button
+              onClick={() => setModalDeleteUser(true)}
+              className="bg-red-500 hover:bg-red-400 text-blanc p-2 rounded-xl mt-4"
+            >
+              Delete Account
+            </button>
+
+            <div className="flex flex-col justify-center items-center gap-4">
+              <h1 className="text-4xl font-semibold text-vertfonce">Favorites</h1>
+               <NavLink to="/favorites" className="text-vertfonce hover:underline text-xl">
+                  View Favorites
+                </NavLink>
+              </div>
          </div>
        </div>
      </div>

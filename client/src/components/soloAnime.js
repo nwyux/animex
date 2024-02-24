@@ -21,9 +21,9 @@ export default function SoloAnime() {
       return (
         <div
           key={anime.id}
-          className="bg-blanc p-4 rounded-lg max-w-4xl gap-4 flex flex-col  justify-center items-center"
+          className="bg-blanc p-4 rounded-lg mx-8 sm:max-w-4xl gap-4 flex flex-col  justify-center items-center"
         >
-          <div className="flex justify-center items-center gap-4">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4">
             <img
               src={anime.attributes.posterImage.medium}
               alt={anime.attributes.titles.en_jp}
@@ -55,7 +55,7 @@ export default function SoloAnime() {
   }, []);
 
   return (
-    <div className="bg-noir min-h-screen flex flex-col justify-center items-center">
+    <div className="bg-noir min-h-screen flex flex-col mt-28 items-center">
       <h1 className="text-5xl text-center text-blanc mb-4">AnimeX</h1>
       <div className="flex flex-col justify-center items-center py-4">
         {displayAnime()}

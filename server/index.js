@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import axios from "axios";
 import { userRouter } from "./routes/user.js";
+import { favoriteRouter } from "./routes/favorite.js";
+import { commentRouter } from "./routes/comment.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -12,6 +14,10 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", userRouter);
+
+app.use("/api/favorites", favoriteRouter);
+
+app.use("/api/comments", commentRouter);
 
 app.get("/", (req, res) => {
   res.json({ message: "The API part is on /api!" });

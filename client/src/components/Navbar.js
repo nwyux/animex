@@ -34,7 +34,7 @@ export default function Navbar() {
           },
       });
       setData(result.data);
-      console.log(result.data);
+      // console.log(result.data);
   };
 
   fetchData();
