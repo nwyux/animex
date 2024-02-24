@@ -1,15 +1,23 @@
 {
     "version": 2,
     "builds": [
-        {
-            "src": "./index.js",
-            "use": "@vercel/node"
+      {
+        "src": "./index.js",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "prisma/schema.prisma",
+        "use": "@prisma/cli",
+        "config": {
+          "prisma": "prisma/client",
+          "output": "prisma"
         }
+      }
     ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "/index.js"
-        }
-    ]
-}
+    "functions": {
+      "api/*": {
+        "runtime": "@vercel/node"
+      }
+    }
+  }
+  
