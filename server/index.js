@@ -20,7 +20,7 @@ app.use("/api/favorites", favoriteRouter);
 app.use("/api/comments", commentRouter);
 
 app.get("/", (req, res) => {
-  res.json({ message: "The API part is on /api!" });
+  res.json({ message: "Welcome to the Animex Server! The API part is on /api!" });
 });
 
 app.get("/api/characters", (req, res) => {
