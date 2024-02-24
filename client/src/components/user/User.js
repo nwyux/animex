@@ -15,11 +15,12 @@ export default function User() {
   const [newLastName, setNewLastName] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const apiURL = process.env.REACT_APP_API_URL;
 
   async function updateUser() {
     try {
       await axios.put(
-        `http://localhost:3001/api/auth/user/${window.localStorage.getItem("userID")}`,
+        `${apiURL}/api/auth/user/${window.localStorage.getItem("userID")}`,
         {
           username: newUsername,
           firstName: newFirstName,
@@ -43,7 +44,7 @@ export default function User() {
   async function deleteUser() {
     try {
       await axios.delete(
-        `http://localhost:3001/api/auth/user/${window.localStorage.getItem("userID")}`,
+        `${apiURL}/api/auth/user/${window.localStorage.getItem("userID")}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -62,7 +63,7 @@ export default function User() {
     const fetchData = async () => {
       try {
         const result = await axios.get(
-          `http://localhost:3001/api/auth/user/${window.localStorage.getItem("userID")}`,
+          `${apiURL}/api/auth/user/${window.localStorage.getItem("userID")}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

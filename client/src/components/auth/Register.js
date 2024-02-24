@@ -16,12 +16,13 @@ export default function Register() {
   const [registered, setRegistered] = useState(false);
   const [userID, setUserID] = useState("");
   const navigate = useNavigate();
+  const apiURL = process.env.REACT_APP_API_URL;
 
   async function register(e) {
     e.preventDefault();
     setLoading(true);
     const response = (
-        await axios.post("http://localhost:3001/api/auth/register", {
+        await axios.post(`${apiURL}/api/auth/register`, {
             username: username,
             firstName: firstName,
             lastName: lastName,

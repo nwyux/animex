@@ -13,10 +13,11 @@ export default function Login() {
     const [logged, setLogged] = useState(false)
     const [userID, setUserID] = useState('');
     const navigate = useNavigate()
+    const apiURL = process.env.REACT_APP_API_URL;
 
     async function login() {
         setLoading(true);
-        const response = (await axios.post('http://localhost:3001/api/auth/login', {
+        const response = (await axios.post(`${apiURL}/api/auth/login`, {
             username: username,
             password: password
         })).data;

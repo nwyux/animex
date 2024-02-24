@@ -8,6 +8,7 @@ export default function Favorites() {
   const [userData, setUserData] = useState(null);
   const [animeDataArray, setAnimeDataArray] = useState([]);
   const [loading, setLoading] = useState(true);
+  const apiURL = process.env.REACT_APP_API_URL;
 
   async function displayFavorites() {
     if (userData && userData.favorites !== ([])) {
@@ -35,7 +36,7 @@ export default function Favorites() {
     if (userData && userData.favorites) {
       try {
         await axios.delete(
-          `http://localhost:3001/api/favorites/${favoriteId}`,
+            `${apiURL}/api/favorites/${favoriteId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -56,7 +57,7 @@ export default function Favorites() {
     const fetchData = async () => {
       try {
         const result = await axios.get(
-          `http://localhost:3001/api/auth/user/${window.localStorage.getItem(
+            `${apiURL}/api/auth/user/${window.localStorage.getItem(
             "userID"
           )}`,
           {

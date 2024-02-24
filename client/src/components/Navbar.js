@@ -9,7 +9,7 @@ export default function Navbar() {
   const menuRef = useRef(null);
   const [token, setUserToken] = useCookie("token", "0");
   const [data, setData] = useState(null);
-
+  const apiURL = process.env.REACT_APP_API_URL;
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -28,7 +28,8 @@ export default function Navbar() {
   useEffect(() => {
 
     const fetchData = async () => {
-      const result = await axios.get("http://localhost:3001/api/auth/user/" + window.localStorage.getItem("userID"), {
+      const result = await axios.get(
+         `${apiURL}/api/auth/user/${window.localStorage.getItem("userID")}`, {
           headers: {
               Authorization: `Bearer ${token}`,
           },
