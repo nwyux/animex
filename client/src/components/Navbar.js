@@ -10,7 +10,6 @@ export default function Navbar() {
   const [token, setUserToken] = useCookie("token", "0");
   const [data, setData] = useState(null);
 
-  console.log(token);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -25,7 +24,21 @@ export default function Navbar() {
     logout();
   }
 
+
   useEffect(() => {
+
+    const fetchData = async () => {
+      const result = await axios.get("http://localhost:3001/api/auth/user/" + window.localStorage.getItem("userID"), {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+      setData(result.data);
+      console.log(result.data);
+  };
+
+  fetchData();
+
     const closeMenu = (event) => {
       if (
         showMenu &&
@@ -45,7 +58,7 @@ export default function Navbar() {
     return () => {
       document.removeEventListener("mousedown", handleMouseDown);
     };
-  }, [showMenu]);
+  }, [showMenu, token]);
 
   const closeMenuOnClick = () => {
     setShowMenu(false);
@@ -54,7 +67,7 @@ export default function Navbar() {
   function isLogged() {
     if (token === "0") {
       return (
-        <ul className="flex text-blanc lg:gap-12 font-alata items-center">
+        <ul className="flex text-noir lg:gap-12 font-alata items-center">
           <li className="mr-6">
             <NavLink to="/login" className="text-blanc hover:underline">
               Login
@@ -69,14 +82,16 @@ export default function Navbar() {
       );
     } else {
       return (
-        <ul className="flex text-blanc lg:gap-12 font-alata items-center">
-          <li className="mr-6">
+        <ul className="flex text-noir lg:gap-12 font-alata items-center">
+          {data && data.admin === true && (
+            <li className="mr-6">
             <NavLink to="/dashboard" className="text-blanc hover:underline">
               Dashboard
             </NavLink>
           </li>
+          )}
           <li className="mr-6">
-            <NavLink to="/userpage" className="text-blanc hover:underline">
+            <NavLink to="/user" className="text-blanc hover:underline">
               Userpage
             </NavLink>
           </li>
@@ -96,15 +111,15 @@ export default function Navbar() {
         <>
           <NavLink
             to="/login"
-            className="text-blanc hover:underline text-xl"
+            className="text-noir hover:underline text-xl"
             onClick={closeMenuOnClick}
           >
             Login
           </NavLink>
-          <hr className="w-1/5 bg-blanc block h-0.5 opacity-40" />
+          <hr className="w-1/5 bg-noir block h-0.5 opacity-40" />
           <NavLink
             to="/register"
-            className="text-blanc hover:underline text-xl"
+            className="text-noir hover:underline text-xl"
             onClick={closeMenuOnClick}
           >
             Register
@@ -114,25 +129,29 @@ export default function Navbar() {
     } else {
       return (
         <>
-          <NavLink
+          {data && data.admin === true && (
+            <>
+            <NavLink
             to="/dashboard"
-            className="text-blanc hover:underline text-xl"
+            className="text-noir hover:underline text-xl"
             onClick={closeMenuOnClick}
           >
             Dashboard
           </NavLink>
-          <hr className="w-1/5 bg-blanc block h-0.5 opacity-40" />
+          <hr className="w-1/5 bg-noir block h-0.5 opacity-40" />
+          </>
+          )}
           <NavLink
-            to="/userpage"
-            className="text-blanc hover:underline text-xl"
+            to="/user"
+            className="text-noir hover:underline text-xl"
             onClick={closeMenuOnClick}
           >
             Userpage
           </NavLink>
-          <hr className="w-1/5 bg-blanc block h-0.5 opacity-40" />
+          <hr className="w-1/5 bg-noir block h-0.5 opacity-40" />
           <NavLink
             to="/"
-            className="text-blanc hover:underline text-xl"
+            className="text-noir hover:underline text-xl"
             onClick={mobileLogout}
           >
             Logout
@@ -190,7 +209,7 @@ export default function Navbar() {
             ref={menuRef}
             className={`${
               showMenu ? "translate-x-0" : "translate-x-full"
-            } fixed -top-0 right-0 min-h-screen font-alata bg-blanc opacity-95 text-blanc w-full max-w-lg flex flex-col justify-center items-center p-6 gap-4 transition-transform duration-200 border-l-2 border-blanc`}
+            } fixed -top-0 right-0 min-h-screen font-alata bg-blanc opacity-95 text-noir w-full max-w-lg flex flex-col justify-center items-center p-6 gap-4 transition-transform duration-200 border-l-2 border-blanc`}
           >
             <button
               className="absolute top-10 right-5 text-3xl font-bold"
@@ -201,36 +220,36 @@ export default function Navbar() {
 
             <NavLink
               to="/animes"
-              className="text-blanc hover:underline text-xl"
+              className="text-noir hover:underline text-xl"
               onClick={closeMenuOnClick}
             >
               Anime List
             </NavLink>
-            <hr className="w-1/5 bg-blanc block h-0.5 opacity-40" />
+            <hr className="w-1/5 bg-noir block h-0.5 opacity-40" />
             <NavLink
               to="/trending"
-              className="text-blanc hover:underline text-xl"
+              className="text-noir hover:underline text-xl"
               onClick={closeMenuOnClick}
             >
               Trending
             </NavLink>
-            <hr className="w-1/5 bg-blanc block h-0.5 opacity-40" />
+            <hr className="w-1/5 bg-noir block h-0.5 opacity-40" />
             <NavLink
               to="/discover"
-              className="text-blanc hover:underline text-xl"
+              className="text-noir hover:underline text-xl"
               onClick={closeMenuOnClick}
             >
               Discover
             </NavLink>
-            <hr className="w-1/5 bg-blanc block h-0.5 opacity-40" />
+            <hr className="w-1/5 bg-noir block h-0.5 opacity-40" />
             <NavLink
               to="/browse"
-              className="text-blanc hover:underline text-xl"
+              className="text-noir hover:underline text-xl"
               onClick={closeMenuOnClick}
             >
               Browse
             </NavLink>
-            <hr className="w-1/5 bg-blanc block h-0.5 opacity-40" />
+            <hr className="w-1/5 bg-noir block h-0.5 opacity-40" />
             {isLoggedMobile()}
           </div>
         </div>

@@ -22,11 +22,31 @@ export const verifyToken = (req, res, next) => {
   }
 };
 
+export const verifyAdmin = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user && req.user.admin === true) {
+      next();
+    } else {
+      res.sendStatus(403);
+    }
+  });
+};
+
+export const verifyUser = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user && req.user.id === req.params.id) {
+      next();
+    } else {
+      res.sendStatus(403);
+    }
+  });
+};
+
 router.get("/", (req, res) => {
   res.send("Hello from user routes!");
 });
 
-router.get("/users", verifyToken, (req, res) => {
+router.get("/users", verifyToken, verifyAdmin, (req, res) => {
   prisma.user
     .findMany()
     .then((data) => {
@@ -37,12 +57,12 @@ router.get("/users", verifyToken, (req, res) => {
     });
 });
 
-router.get("/user/:id", (req, res) => {
+router.get("/user/:id", verifyToken, verifyUser, (req, res) => {
   const { id } = req.params;
   prisma.user
     .findUnique({
       where: {
-        id: parseInt(id),
+        id: id,
       },
     })
     .then((data) => {
@@ -68,7 +88,8 @@ router.post("/register", (req, res) => {
       },
     })
     .then((data) => {
-      res.json(data);
+      const token = jwt.sign({ id: data.id, admin: data.admin }, "secret");
+      res.json({ access_token: token, userID: data.id, admin: data.admin });
     })
     .catch((error) => {
       res.json({ error: error.message });
@@ -91,7 +112,6 @@ router.post("/login", async (req, res) => {
         .json({ message: "Username or password is incorrect" });
     }
 
-    // Ensure that the user object has the expected properties
     if (!user.password) {
       return res
         .status(500)
@@ -106,8 +126,9 @@ router.post("/login", async (req, res) => {
         .json({ message: "Username or password is incorrect" });
     }
 
-    const token = jwt.sign({ id: user._id }, "secret");
-    res.json({ token, userID: user._id });
+    const token = jwt.sign({ id: user.id, admin: user.admin }, "secret");
+    
+    res.json({ access_token: token, userID: user.id, admin: user.admin });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -115,13 +136,14 @@ router.post("/login", async (req, res) => {
 });
 
 
-router.put("/user/:id", (req, res) => {
+
+router.put("/user/:id", verifyToken, verifyUser, (req, res) => {
   const { id } = req.params;
   const { username, password, firstName, lastName, email } = req.body;
   prisma.user
     .update({
       where: {
-        id: parseInt(id),
+        id: id,
       },
       data: {
         username,
@@ -139,12 +161,12 @@ router.put("/user/:id", (req, res) => {
     });
 });
 
-router.delete("/user/:id", (req, res) => {
+router.delete("/user/:id", verifyToken, verifyUser, (req, res) => {
   const { id } = req.params;
   prisma.user
     .delete({
       where: {
-        id: parseInt(id),
+        id: id,
       },
     })
     .then((data) => {
