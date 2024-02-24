@@ -13,11 +13,6 @@
           "output": "prisma"
         }
       }
-    ],
-    "functions": {
-      "api/*": {
-        "runtime": "@vercel/node"
-      }
-    }
+    ]
   }
   
