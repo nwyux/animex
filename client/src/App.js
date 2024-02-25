@@ -11,7 +11,7 @@ import Favorites from "./components/user/Favorites";
 
 function App() {
   return (
-    <div className="overflow-hidden bg-noir min-h-[100vh]">
+    <div className="overflow-hidden bg-noir min-h-screen">
       <Navbar />
 
       <Routes>

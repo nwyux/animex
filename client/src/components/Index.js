@@ -29,7 +29,7 @@ export default function Index() {
     }, [])
 
   return (
-    <div className="bg-noir min-h-screen flex flex-col justify-center items-center">
+    <div className="bg-noir min-h-screen mt-28 flex flex-col justify-center items-center">
       <h1 className="text-5xl text-center text-blanc mb-4">AnimeX</h1>
         <div className="flex flex-col justify-center items-center py-4">
                 <div key={anime.id} className="bg-blanc p-4 rounded-lg max-w-lg flex flex-col justify-center items-center">

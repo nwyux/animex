@@ -17,6 +17,7 @@ export default function Navbar() {
 
   function logout() {
     setUserToken('0');
+    window.localStorage.clear();
   }
 
   function mobileLogout() {
@@ -24,8 +25,8 @@ export default function Navbar() {
     logout();
   }
 
-
   useEffect(() => {
+
 
     const fetchData = async () => {
       const result = await axios.get(
@@ -59,6 +60,16 @@ export default function Navbar() {
     return () => {
       document.removeEventListener("mousedown", handleMouseDown);
     };
+
+      // if scroll down, add classlist backdrop-blur-md to the navbar
+      function handleScroll() {
+        const navbar = document.querySelector(".navbar");
+        if (window.scrollY > 0) {
+          navbar.classList.add("backdrop-blur-lg");
+        } else {
+          navbar.classList.remove("backdrop-blur-lg");
+        }
+      }
   }, [showMenu, token]);
 
   const closeMenuOnClick = () => {
@@ -164,7 +175,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="z-50 text-blanc py-4 px-4 sm:px-0 items-center absolute top-0 left-0 right-0">
+      <div className={`navbar z-50 text-blanc py-4 px-4 sm:px-0 items-center fixed top-0 left-0 right-0 ${window.scrollY > 6 ? 'backdrop-blur-md' : ''}`}>
         <div className="hidden md:border-b-[.5px] py-3 md:border-blanc container b mx-auto md:flex justify-around align-middle items-center">
           <Link to="/" className="text-3xl font-archivo">
             {/* <img src={logo} alt="ECONIMAL" className="w-40" /> */}

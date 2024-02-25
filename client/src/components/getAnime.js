@@ -2,11 +2,14 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import AnimesCard from './AnimesCard';
+import useCookie from "react-use-cookie";
 
 export default function Animes() {
     const [anime, setAnime] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [token, setToken] = useCookie("token", "0");
+    const apiURL = process.env.REACT_APP_API_URL;
 
     async function fetchAnimeData(page) {
         try {
@@ -15,6 +18,25 @@ export default function Animes() {
             setAnime(animeData);
             setTotalPages(Math.floor(response.data.meta.count / 20));
             console.log(animeData);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function addFavorite(animeId) {
+        try {
+            await axios.post(
+                `${apiURL}/api/favorites`,
+                {
+                    userId: window.localStorage.getItem("userID"),
+                    animeId: animeId,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
         } catch (error) {
             console.error(error);
         }
@@ -37,8 +59,14 @@ export default function Animes() {
             <h1 className="text-5xl text-center text-blanc mb-4">AnimeX list of animes</h1>
             <div className="grid grid-cols-1 p-2 my-4 gap-6 md:grid-cols-2 lg:grid-cols-4">
                 {anime.map((anime) => (
-                    <AnimesCard key={anime.id} {...anime} />
-                ))}
+                        <AnimesCard
+                            key={anime.id}
+                            id={anime.id}
+                            animeId={anime.id}
+                            attributes={anime.attributes}
+                            addFavorite={addFavorite}
+                        />
+                    ))}
             </div>
             <div className="flex justify-center mt-4 bg-blanc p-2 my-4">
                 <button onClick={handlePrevPage} disabled={currentPage === 1}>
