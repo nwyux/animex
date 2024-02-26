@@ -13,40 +13,42 @@ export default function UserProfile() {
   const apiURL = process.env.REACT_APP_API_URL;
   const { username } = useParams();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
+  async function displayFavorites() {
+    try {
+        const animeIds = userFavorites.map((favorite) => favorite.animeId).join(',');
         const response = await axios.get(
-          `${apiURL}/api/auth/profile/${username}`
+            `https://kitsu.io/api/edge/anime?filter[id]=${animeIds}`
         );
-        setUserData(response.data);
-        setUserComments(response.data.comments);
-        setUserFavorites(response.data.favorites);
-        displayFavorites();
-      } catch (error) {
+
+        const animeDataArray = response.data.data;
+        setAnimeDataArray(animeDataArray);
+    } catch (error) {
         console.error(error);
-      }
     }
+}
+
+
+useEffect(() => {
+    async function fetchData() {
+        try {
+            const response = await axios.get(`${apiURL}/api/auth/profile/${username}`);
+            setUserData(response.data);
+            setUserComments(response.data.comments);
+            setUserFavorites(response.data.favorites);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     fetchData();
 
-    async function displayFavorites() {
-      if (userFavorites && userFavorites.length > 0) {
-        try {
-          const animeDataArray = await Promise.all(
-            userFavorites.map(async (favorite) => {
-              const response = await axios.get(
-                `https://kitsu.io/api/edge/anime/${favorite.animeId}`
-              );
-              return response.data.data;
-            })
-          );
-          setAnimeDataArray(animeDataArray);
-        } catch (error) {
-          console.error(error);
-        }
-      }
+    if (userFavorites.length > 0) {
+        displayFavorites();
     }
-  }, [username, apiURL, userFavorites]);
+}, [username, apiURL, userFavorites.length]);
+
+
+
 
   function formatDate(date) {
     const options = { year: "numeric", month: "long", day: "numeric" };

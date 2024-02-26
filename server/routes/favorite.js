@@ -22,7 +22,7 @@ router.get("/all", (req, res) => {
     });
 });
 
-router.post("/", verifyToken, verifyUser, (req, res) => {
+router.post("/", verifyToken, (req, res) => {
   const { userId, animeId } = req.body;
   prisma.favorite
     .create({
@@ -39,7 +39,7 @@ router.post("/", verifyToken, verifyUser, (req, res) => {
     });
 });
 
-router.delete("/:id", verifyToken, verifyUser, (req, res) => {
+router.delete("/:id", verifyToken, (req, res) => {
   const id = req.params.id;
   prisma.favorite
     .delete({
