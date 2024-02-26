@@ -1,12 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import PageTemplate from "./PageTemplate";
 import useCookie from "react-use-cookie";
 
 export default function SoloAnime() {
   const [anime, setAnime] = useState([]);
   const { id } = useParams();
+  const { username } = useParams();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [comments, setComments] = useState([]);
@@ -38,8 +39,6 @@ export default function SoloAnime() {
     }
   }
   
-
-
   async function addComment() {
     try {
       await axios.post(
@@ -59,6 +58,7 @@ export default function SoloAnime() {
       );
       setTitle("");
       setContent("");
+      getComments();
     } catch (error) {
       console.error(error);
     }
@@ -131,7 +131,9 @@ export default function SoloAnime() {
                 </p>
                 <div className="flex justify-center items-center gap-4">
                   <p className="text-noir text-sm">
-                    {comment.username}
+                    <NavLink to={`/user/${comment.username}`}>
+                      {comment.username}
+                    </NavLink>
                   </p>
                   <p className="text-noir text-sm">
                     {commentDate(comment.createdAt)}

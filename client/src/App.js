@@ -10,6 +10,7 @@ import User from "./components/user/User";
 import Favorites from "./components/user/Favorites";
 
 import { AnimatePresence } from "framer-motion";
+import UserProfile from "./components/user/UserProfile";
 
 function App() {
   const location = useLocation();
@@ -25,6 +26,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/user" element={<User />} />
+          <Route path="/user/:username" element={<UserProfile />} />
           <Route path="/favorites" element={<Favorites />} />
         </Routes>
       </AnimatePresence>

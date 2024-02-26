@@ -100,6 +100,36 @@ router.get("/user/:id", verifyToken, verifyUser, (req, res) => {
     });
 });
 
+router.get("/profile/:username", (req, res) => {
+  const { username } = req.params;
+  prisma.user
+    .findUnique({
+      where: {
+        username: username,
+      },
+      select: {
+        username: true,
+        firstName: true,
+        email: true,
+        createdAt: true,
+        favorites: true,
+        comments: true,
+      },
+    })
+    .then((data) => {
+      if (!data.favorites) {
+        data.favorites = [];
+      }
+      if (!data.comments) {
+        data.comments = [];
+      }
+      res.json(data);
+    })
+    .catch((error) => {
+      res.json({ error: error.message });
+    });
+});
+
 router.post("/register", (req, res) => {
   const { username, password, firstName, lastName, email } = req.body;
   const salt = bcrypt.genSaltSync(10);
