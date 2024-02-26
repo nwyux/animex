@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
 import { NavLink } from "react-router-dom";
+import PageTemplate from "../PageTemplate";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -45,13 +46,14 @@ export default function Register() {
 
       window.localStorage.setItem("userID", response.userID);
       window.localStorage.setItem("admin", response.admin);
+
+      navigate("/user");
     }
   }
 
-  if (registered) window.location.href = "/user";
-
   return (
     <div className="loginBg overflow-hidden flex h-screen relative justify-center items-center">
+      <PageTemplate>
       <div className="flex absolute top-64 z-20 justify-center bg-vert sm:bg-transparent rounded-full items-center mb-4">
         <NavLink
           to="/login"
@@ -121,6 +123,7 @@ export default function Register() {
           </NavLink>
         </div>
       </div>
+      </PageTemplate>
     </div>
   );
 }

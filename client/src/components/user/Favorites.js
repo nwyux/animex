@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import useCookie from "react-use-cookie";
 import axios from "axios";
 import Favorite from "./Favorite";
+import PageTemplate from "../PageTemplate";
 
 export default function Favorites() {
   const [token] = useCookie("token", "0");
@@ -91,6 +92,7 @@ export default function Favorites() {
 
   return (
     <div className="bg-noir min-h-screen flex flex-col items-center mt-28">
+      <PageTemplate>
         <div className="flex flex-col items-center">
           <h1 className="text-4xl font-semibold text-blanc">Favorites</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
@@ -113,6 +115,7 @@ export default function Favorites() {
             )}
           </div>
       </div>
+      </PageTemplate>
     </div>
   );
 }

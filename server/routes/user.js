@@ -195,10 +195,6 @@ router.delete("/user/:id", verifyUserOrAdmin, (req, res) => {
       where: {
         id: id,
       },
-      include: {
-        favorites: true,
-        comments: true,
-      },
     })
     .then((data) => {
       res.json(data);

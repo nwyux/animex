@@ -3,6 +3,7 @@ import useCookie from "react-use-cookie";
 import axios from "axios";
 import { X } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import PageTemplate from "../PageTemplate";
 
 export default function User() {
   const [token, setToken] = useCookie("token", "0");
@@ -89,6 +90,7 @@ export default function User() {
 
   return (
     <div className="text-noir sm:text-blanc overflow-hidden flex h-screen relative justify-center items-center">
+      <PageTemplate>
       {modalDeleteUser && (
         <div className="absolute z-20 bg-transparent backdrop-blur-lg bg-opacity-50 top-0 left-0 w-screen h-screen flex justify-center items-center">
           <X onClick={() => setModalDeleteUser(false)} className="absolute mx-12 right-2 sm:right-24 top-24 cursor-pointer text-blanc" />
@@ -211,6 +213,7 @@ export default function User() {
               </div>
          </div>
        </div>
+       </PageTemplate>
      </div>
    );
  }

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import AnimesCard from './AnimesCard';
 import useCookie from "react-use-cookie";
+import PageTemplate from './PageTemplate';
 
 export default function Animes() {
     const [anime, setAnime] = useState([]);
@@ -56,6 +57,7 @@ export default function Animes() {
 
     return (
         <div className="bg-noir min-h-screen flex flex-col justify-center items-center mt-28">
+            <PageTemplate>
             <h1 className="text-5xl text-center text-blanc mb-4">AnimeX list of animes</h1>
             <div className="grid grid-cols-1 p-2 my-4 gap-6 md:grid-cols-2 lg:grid-cols-4">
                 {anime.map((anime) => (
@@ -77,6 +79,7 @@ export default function Animes() {
                     Next Page
                 </button>
             </div>
+            </PageTemplate>
         </div>
     );
 }

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import useCookie from 'react-use-cookie';
 import { NavLink } from 'react-router-dom';
+import PageTemplate from '../PageTemplate';
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -34,14 +35,15 @@ export default function Login() {
 
             window.localStorage.setItem('userID', response.userID);
             window.localStorage.setItem('admin', response.admin);
+
+            navigate('/user');
         }
         setLoading(false);
     }
 
-    if (logged)
-        window.location.href = '/user';
     return (
         <div className="loginBg overflow-hidden flex h-screen relative justify-center items-center">
+            <PageTemplate>
             <div className='flex absolute top-64 z-20 justify-center bg-vert sm:bg-transparent rounded-full items-center mb-4'>
                 <NavLink to='/login' className="text-2xl sm:-mt-14  sm:text-4xl sm:bg-transparent font-semibold bg-vertfonce rounded-full py-4 px-11 text-blanc">Login</NavLink>
                 <NavLink to='/register' className="text-2xl sm:hidden font-semibold py-4 px-6 text-vertfonce">Register</NavLink>
@@ -76,6 +78,7 @@ export default function Login() {
                   <NavLink to='/register' className="text-vert hover:underline">Register here</NavLink>
                 </div>
             </div>
+            </PageTemplate>
         </div>
     )
 }
