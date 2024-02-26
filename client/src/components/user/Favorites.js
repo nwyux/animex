@@ -3,13 +3,22 @@ import useCookie from "react-use-cookie";
 import axios from "axios";
 import Favorite from "./Favorite";
 import PageTemplate from "../PageTemplate";
+import Notification from "../Notification";
 
 export default function Favorites() {
   const [token] = useCookie("token", "0");
   const [userData, setUserData] = useState(null);
   const [animeDataArray, setAnimeDataArray] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [notification, setNotification] = useState(false);
   const apiURL = process.env.REACT_APP_API_URL;
+
+  const notify = (color, message) => {
+    setNotification({ color, message });
+    setTimeout(() => {
+      setNotification(false);
+    }, 3000);
+  };
 
   async function removeFavorite(favoriteId) {
     if (userData && userData.favorites) {
@@ -27,6 +36,8 @@ export default function Favorites() {
           ...prevUserData,
           favorites: prevUserData.favorites.filter(fav => fav.id !== favoriteId)
         }));
+
+        notify("bg-red-600", "The favorite has been removed");
       } catch (error) {
         console.error("Error removing favorite:", error);
       }
@@ -84,6 +95,9 @@ export default function Favorites() {
   return (
     <div className="bg-noir min-h-screen flex flex-col items-center mt-28">
       <PageTemplate>
+        {notification && (
+          <Notification color={notification.color} message={notification.message} />
+        )}
         <div className="flex flex-col items-center">
           <h1 className="text-4xl font-semibold text-blanc">Favorites</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
