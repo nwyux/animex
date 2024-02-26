@@ -49,4 +49,6 @@ model Comment {
   animeId   String
   title     String
   content   String
+
+  @@unique([userId, animeId])
 }
