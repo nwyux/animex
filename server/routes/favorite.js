@@ -2,7 +2,7 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { verifyToken, verifyAdmin, verifyUser } from "./user.js";
+import { verifyToken, verifyUser } from "./user.js";
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
   res.json({ message: "Hello from favorite routes!" });
 });
 
-router.get("/all", verifyToken, (req, res) => {
+router.get("/all", (req, res) => {
   prisma.favorite
     .findMany()
     .then((data) => {
@@ -22,7 +22,7 @@ router.get("/all", verifyToken, (req, res) => {
     });
 });
 
-router.post("/", verifyToken, (req, res) => {
+router.post("/", verifyToken, verifyUser, (req, res) => {
   const { userId, animeId } = req.body;
   prisma.favorite
     .create({
@@ -39,7 +39,7 @@ router.post("/", verifyToken, (req, res) => {
     });
 });
 
-router.delete("/:id", verifyToken, (req, res) => {
+router.delete("/:id", verifyToken, verifyUser, (req, res) => {
   const id = req.params.id;
   prisma.favorite
     .delete({
@@ -55,13 +55,13 @@ router.delete("/:id", verifyToken, (req, res) => {
     });
 });
 
-router.get("/user/:id", verifyToken, verifyUser, (req, res) => {
+router.get("/user/:id", (req, res) => {
   const id = req.params.id;
   prisma.favorite
     .findMany({
       where: {
         userId: id,
-      },
+      }
     })
     .then((data) => {
       res.json(data);
