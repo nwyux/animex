@@ -46,6 +46,7 @@ export default function Register() {
 
       window.localStorage.setItem("userID", response.userID);
       window.localStorage.setItem("admin", response.admin);
+      window.localStorage.setItem("username", response.username);
 
       navigate("/user");
     }
