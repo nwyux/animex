@@ -20,7 +20,7 @@ function App() {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
-          <Route path="/animes" element={<Animes />} />
+          <Route path="/animes/:page" element={<Animes />} />
           <Route path="/anime/:id" element={<SoloAnime />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

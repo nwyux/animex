@@ -183,7 +183,7 @@ export default function Navbar() {
           </Link>
           <ul className="flex text-blanc lg:gap-12 font-alata items-center">
             <li className="mr-6">
-              <NavLink to="/animes" className="text-blanc hover:underline">
+              <NavLink to="/animes/1" className="text-blanc hover:underline">
                 Anime List
               </NavLink>
             </li>
@@ -231,7 +231,7 @@ export default function Navbar() {
             </button>
 
             <NavLink
-              to="/animes"
+              to="/animes/1"
               className="text-noir hover:underline text-xl"
               onClick={closeMenuOnClick}
             >

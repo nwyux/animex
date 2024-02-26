@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import axios from "axios";
 import { userRouter } from "../routes/user.js";
 import { favoriteRouter } from "../routes/favorite.js";
 import { commentRouter } from "../routes/comment.js";
