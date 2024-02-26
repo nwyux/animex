@@ -116,7 +116,7 @@ router.post("/register", (req, res) => {
     })
     .then((data) => {
       const token = jwt.sign({ id: data.id, admin: data.admin }, "secret");
-      res.json({ access_token: token, userID: data.id, admin: data.admin });
+      res.json({ access_token: token, userID: data.id, admin: data.admin, username: data.username });
     })
     .catch((error) => {
       res.json({ error: error.message });
@@ -155,7 +155,7 @@ router.post("/login", async (req, res) => {
 
     const token = jwt.sign({ id: user.id, admin: user.admin }, "secret");
     
-    res.json({ access_token: token, userID: user.id, admin: user.admin });
+    res.json({ access_token: token, userID: user.id, admin: user.admin, username: user.username });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
