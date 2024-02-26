@@ -17,7 +17,6 @@ export default function SoloAnime() {
     try {
       const res = await axios.get(`https://kitsu.io/api/edge/anime/${id}`);
       setAnime(res.data.data);
-      console.log(res.data.data);
     } catch (error) {
       console.error(error);
     }
@@ -30,8 +29,6 @@ export default function SoloAnime() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(res.data);
-  
       const filteredComments = res.data.filter((comment) => comment.animeId === id);
   
       setComments(filteredComments);
@@ -42,7 +39,6 @@ export default function SoloAnime() {
   }
   
 
-  getComments();
 
   async function addComment() {
     try {
@@ -63,7 +59,6 @@ export default function SoloAnime() {
       );
       setTitle("");
       setContent("");
-      console.log("Comment added");
     } catch (error) {
       console.error(error);
     }
@@ -105,6 +100,7 @@ export default function SoloAnime() {
 
   useEffect(() => {
     getAnime();
+    getComments();
   }, []);
 
   function commentDate(createdAt) {
