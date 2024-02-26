@@ -22,22 +22,36 @@ router.get("/all", (req, res) => {
     });
 });
 
-router.post("/", verifyToken, (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   const { userId, animeId } = req.body;
-  prisma.favorite
-    .create({
+
+  try {
+    const existingFavorite = await prisma.favorite.findUnique({
+      where: {
+        userId_animeId: {
+          userId: userId,
+          animeId: animeId,
+        },
+      },
+    });
+
+    if (existingFavorite) {
+      return res.json({ message: "This anime is already in your Favorites list!" });
+    }
+
+    const newFavorite = await prisma.favorite.create({
       data: {
         userId: userId,
         animeId: animeId,
       },
-    })
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((error) => {
-      res.json({ error: error.message });
     });
+
+    return res.json(newFavorite);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 });
+
 
 router.delete("/:id", verifyToken, (req, res) => {
   const id = req.params.id;
