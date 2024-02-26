@@ -1,4 +1,5 @@
 import { Heart } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 export default function Favorite(props) {
   return (
@@ -6,9 +7,9 @@ export default function Favorite(props) {
       key={props.id}
       className="soloCard transition-all duration-150 relative rounded-lg max-w-sm flex flex-col justify-center items-center"
     >
-      <a href={`/anime/${props.id}`}>
+      <NavLink to={`/anime/${props.id}`}>
         <img src={props.attributes.posterImage.small} alt={props.title} />
-      </a>
+      </NavLink>
       <div className="flex justify-center items-center gap-4 absolute bottom-0 backdrop-blur-xl w-full">
         <h2 className="text-blanc px-2 p-2 text-md font-bold w-full">
           {props.attributes.titles.en_jp}
