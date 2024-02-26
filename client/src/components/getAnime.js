@@ -26,7 +26,6 @@ export default function Animes() {
       const animeData = response.data.data;
       setAnime(animeData);
       setTotalPages(Math.floor(response.data.meta.count / 20));
-      console.log(animeData);
     } catch (error) {
       console.error(error);
     }
