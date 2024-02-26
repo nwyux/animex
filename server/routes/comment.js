@@ -38,24 +38,57 @@ router.get("/:id", verifyToken, (req, res) => {
       });
   });
 
-router.post("/", verifyToken, (req, res) => {
-    const { userId, username, animeId, title, content } = req.body;
-    prisma.comment
-      .create({
-        data: {
+// router.post("/", verifyToken, (req, res) => {
+//     const { userId, username, animeId, title, content } = req.body;
+//     prisma.comment
+//       .create({
+//         data: {
+//           userId: userId,
+//           username: username,
+//           animeId: animeId,
+//           title: title,
+//           content: content,
+//         },
+//       })
+//       .then((data) => {
+//         res.json(data);
+//       })
+//       .catch((error) => {
+//         res.json({ error: error.message });
+//       });
+//   });
+
+router.post("/", verifyToken, async (req, res) => {
+  const { userId, username, animeId, title, content} = req.body;
+
+  try {
+    const existingcomment = await prisma.comment.findUnique({
+      where: {
+        userId_animeId: {
           userId: userId,
-          username: username,
           animeId: animeId,
-          title: title,
-          content: content,
         },
-      })
-      .then((data) => {
-        res.json(data);
-      })
-      .catch((error) => {
-        res.json({ error: error.message });
-      });
+      },
+    });
+
+    if (existingcomment) {
+      return res.json({ message: "You already posted a comment here!" });
+    }
+
+    const newcomment = await prisma.comment.create({
+      data: {
+        userId: userId,
+        username: username,
+        animeId: animeId,
+        title: title,
+        content: content,
+      },
+    });
+
+    return res.json(newcomment);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
   });
 
 export { router as commentRouter };

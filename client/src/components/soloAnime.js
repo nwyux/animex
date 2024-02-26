@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import PageTemplate from "./PageTemplate";
 import useCookie from "react-use-cookie";
+import Notification from "./Notification";
 
 export default function SoloAnime() {
   const [anime, setAnime] = useState([]);
@@ -13,6 +14,14 @@ export default function SoloAnime() {
   const [comments, setComments] = useState([]);
   const [token, setToken] = useCookie("token", "0");
   const apiURL = process.env.REACT_APP_API_URL;
+  const [notification, setNotification] = useState(false);
+
+  const notify = (color, message) => {
+    setNotification({ color, message });
+    setTimeout(() => {
+      setNotification(false);
+    }, 5000);
+  };
 
   async function getAnime() {
     try {
@@ -41,7 +50,7 @@ export default function SoloAnime() {
   
   async function addComment() {
     try {
-      await axios.post(
+      const response = await axios.post(
         `${apiURL}/api/comments`,
         {
           userId: window.localStorage.getItem("userID"),
@@ -56,9 +65,19 @@ export default function SoloAnime() {
           },
         }
       );
+
+      const { message } = response.data;
+
+
       setTitle("");
       setContent("");
       getComments();
+      
+      if (message) {
+        notify("bg-red-500", message);
+      } else {
+        notify("bg-emerald-500", "Comment added");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -111,6 +130,9 @@ export default function SoloAnime() {
   return (
     <div className="bg-noir min-h-screen flex flex-col mt-28 items-center gap-4">
       <PageTemplate>
+      {notification && (
+        <Notification color={notification.color} message={notification.message} />
+      )}
       <h1 className="text-5xl text-center text-blanc mb-4">AnimeX</h1>
       <div className="flex flex-col justify-center items-center py-4">
         {displayAnime()}
@@ -157,16 +179,20 @@ export default function SoloAnime() {
               className="w-full p-3 mb-6 bg-vert text-vertfonce rounded-xl placeholder:text-vertfonce placeholder:text-xl placeholder:font-bold"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              required
             />
             <textarea
               placeholder="Content"
               className="w-full p-3 mb-6 bg-vert text-vertfonce rounded-xl placeholder:text-vertfonce placeholder:text-xl placeholder:font-bold"
               value={content}
               onChange={(e) => setContent(e.target.value)}
+              required
+              maxLength="500"
             />
             <button
-              className="w-full p-3 mt-6 bg-vertfonce sm:bg-marron shadow-2xl text-blanc rounded-xl font-bold"
+              className={"bg-vertfonce text-blanc p-2 rounded-xl " + (title === "" || content === "" ? "opacity-50 cursor-not-allowed" : "")}
               onClick={addComment}
+              disabled={title === "" || content === ""}
             >
               Add Comment
             </button>

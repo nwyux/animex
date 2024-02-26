@@ -68,6 +68,15 @@ useEffect(() => {
                   <p className="text-center text-sm text-gray-500">
                     {userData.email}
                   </p>
+
+                  {userData.username === window.localStorage.getItem("username") ? (
+                    <NavLink
+                      to={`/user/${userData.username}/edit`}
+                      className="text-vertfonce hover:underline"
+                    >
+                      Edit profile
+                    </NavLink>
+                  ) : null}
                 </h1>
                 <p className="text-center text-sm text-gray-700">
                   Membre depuis le : {formatDate(userData.createdAt)}
