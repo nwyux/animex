@@ -175,7 +175,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className={`navbar z-50 text-blanc py-4 px-4 sm:px-0 items-center fixed top-0 left-0 right-0 ${window.scrollY > 6 ? 'backdrop-blur-md' : ''}`}>
+      <div className={`navbar z-40 text-blanc py-4 px-4 sm:px-0 items-center fixed top-0 left-0 right-0 ${window.scrollY > 6 ? 'backdrop-blur-md' : ''}`}>
         <div className="hidden md:border-b-[.5px] py-3 md:border-blanc container b mx-auto md:flex justify-around align-middle items-center">
           <Link to="/" className="text-3xl font-archivo">
             {/* <img src={logo} alt="ECONIMAL" className="w-40" /> */}
