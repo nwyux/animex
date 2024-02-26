@@ -5,7 +5,7 @@ import AnimesCard from './AnimesCard';
 import useCookie from 'react-use-cookie';
 import PageTemplate from './PageTemplate';
 import axios from 'axios';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Pagination from './Pagination';
 import { useParams } from 'react-router-dom';
 
 export default function Animes() {
@@ -73,6 +73,7 @@ export default function Animes() {
     <div className="bg-noir min-h-screen flex flex-col justify-center items-center mt-28">
       <PageTemplate>
         <h1 className="text-5xl text-center text-blanc mb-4">AnimeX list of animes</h1>
+        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
         <div className="grid grid-cols-1 p-2 my-4 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {anime.map((anime) => (
             <AnimesCard
@@ -84,22 +85,7 @@ export default function Animes() {
             />
           ))}
         </div>
-        <div className="flex justify-center items-center mt-4 p-2 my-4 text-xl">
-          <button onClick={handlePrevPage} disabled={currentPage === 1} className={`bg-gray-300 bg-opacity-50 backdrop-blur-lg rounded-full p-1 hover:bg-opacity-25`}>
-          <ChevronLeft />
-          </button>
-          <label className="text-blanc mx-4">Page</label>
-            <select className="bg-gray-300 bg-opacity-50 backdrop-blur-lg rounded-full p-1 hover:bg-opacity-25 mx-4 flex items-center justify-center" value={currentPage} onChange={(e) => setCurrentPage(Number(e.target.value))}>
-                {[...Array(totalPages).keys()].map((x) => (
-                    <option key={x + 1} value={x + 1}>
-                        {x + 1}
-                    </option>
-                ))}
-            </select>
-          <button onClick={handleNextPage} disabled={currentPage === totalPages} className='bg-gray-300 bg-opacity-50 backdrop-blur-lg rounded-full p-1 hover:bg-opacity-25'>
-            <ChevronRight />
-          </button>
-        </div>
+        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
       </PageTemplate>
     </div>
   );
