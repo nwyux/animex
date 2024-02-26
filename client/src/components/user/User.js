@@ -86,10 +86,9 @@ export default function User() {
     fetchData();
   }, [token]);
 
-  if (!userData) return <p>Loading...</p>;
 
   return (
-    <div className="text-noir sm:text-blanc overflow-hidden flex h-screen relative justify-center items-center">
+    <div className="text-noir sm:text-blanc overflow-hidden flex min-h-screen relative justify-center items-center">
       <PageTemplate>
       {modalDeleteUser && (
         <div className="absolute z-20 bg-transparent backdrop-blur-lg bg-opacity-50 top-0 left-0 w-screen h-screen flex justify-center items-center">
@@ -188,8 +187,8 @@ export default function User() {
           </form>
         </div>
       )}
-      <div className="w-full sm:max-w-2xl p-4 bg-blanc sm:backdrop-blur-sm sm:border-2 sm:border-blanc sm:top-48 sm:bg-transparent absolute top-64 h-screen rounded-[45px]">
-         <h1 className="text-2xl font-bold text-center">Welcome {userData.username}</h1>
+      <div className="h-full p-8 rounded-lg border-2 border-gray-400 flex flex-col justify-center items-center relative bg-transparent backdrop-blur-lg">
+        <h1 className="text-4xl text-center font-semibold text-vertfonce">Welcome, {userData?.username}</h1>
          <div className="flex flex-col items-center relative">
            <button
              onClick={() => setModalFormUpdateUser(true)}
@@ -207,7 +206,7 @@ export default function User() {
 
             <div className="flex flex-col justify-center items-center gap-4">
               <h1 className="text-4xl font-semibold text-vertfonce">Favorites</h1>
-               <NavLink to="/favorites" className="text-vertfonce hover:underline text-xl">
+               <NavLink to="/favorites" className="text-vertfonce hover:underline rounded-xl text-xl p-4 bg-blanc">
                   View Favorites
                 </NavLink>
               </div>

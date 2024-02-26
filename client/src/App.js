@@ -17,7 +17,7 @@ function App() {
     <div className="overflow-hidden bg-noir min-h-screen">
       <Navbar />
 
-        <AnimatePresence mode='wait'>
+      <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
           <Route path="/animes" element={<Animes />} />
@@ -27,7 +27,7 @@ function App() {
           <Route path="/user" element={<User />} />
           <Route path="/favorites" element={<Favorites />} />
         </Routes>
-        </AnimatePresence>
+      </AnimatePresence>
 
       <Footer />
     </div>
