@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import PageTemplate from "../PageTemplate";
 import { NavLink } from "react-router-dom";
 import Favorite from "./Favorite";
+import ProfileFavorite from "./ProfileFavorite";
 
 export default function UserProfile() {
   const [userData, setUserData] = useState([]);
@@ -102,7 +103,7 @@ useEffect(() => {
                   {animeDataArray.length > 0 ? (
                     animeDataArray.map((animeData) => {
                       return (
-                        <Favorite
+                        <ProfileFavorite
                           key={animeData.id}
                           id={animeData.id}
                           attributes={animeData.attributes}

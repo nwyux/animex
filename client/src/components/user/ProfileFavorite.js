@@ -1,7 +1,7 @@
 import { Heart } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
-export default function Favorite(props) {
+export default function ProfileFavorite(props) {
   return (
     <div
       key={props.id}
@@ -14,15 +14,6 @@ export default function Favorite(props) {
         <h2 className="text-blanc px-2 p-2 text-md font-bold w-full">
           {props.attributes.titles.en_jp}
         </h2>
-
-        {window.localStorage.getItem("userID") && (
-        <button
-          className="mr-4 text-3xl font-bold text-blanc"
-          onClick={() => props.removeFavorite(props.favoriteId)}
-        >
-          <Heart />
-        </button>
-        )}
       </div>
     </div>
   );

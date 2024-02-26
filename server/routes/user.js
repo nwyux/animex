@@ -7,16 +7,20 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 export const verifyToken = (req, res, next) => {
-  const bearerHeader = req.headers["authorization"];
-  if (typeof bearerHeader !== "undefined") {
-      const bearer = bearerHeader.split(" ");
-      const token = bearer[1];
-      req.token = token;
+  const authHeader = req.headers.authorization;
+  if (authHeader) {
+    const token = authHeader.split(" ")[1];
+    jwt.verify(token, "secret", (err, decoded) => {
+      if (err) {
+        return res.json({ token, error: err.message });
+      } 
+      req.user = decoded;
       next();
+    });
   } else {
-      res.sendStatus(403);
+    res.sendStatus(401);
   }
-}
+};
 
 export const verifyAdmin = (req, res, next) => {
   verifyToken(req, res, () => {
