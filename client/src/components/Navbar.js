@@ -103,7 +103,8 @@ export default function Navbar() {
           </li>
           )}
           <li className="mr-6">
-            <NavLink to="/user" className="text-blanc hover:underline">
+            <NavLink to={"/user/" + window.localStorage.getItem("username")}
+            className="text-blanc hover:underline">
               Userpage
             </NavLink>
           </li>
@@ -154,7 +155,7 @@ export default function Navbar() {
           </>
           )}
           <NavLink
-            to="/user"
+            to={"/user/" + window.localStorage.getItem("username")}
             className="text-noir hover:underline text-xl"
             onClick={closeMenuOnClick}
           >

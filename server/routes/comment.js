@@ -2,7 +2,7 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { verifyToken, verifyAdmin, verifyUser } from "./user.js";
+import { verifyToken, verifyUserOrAdmin } from "./user.js";
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -59,7 +59,7 @@ router.get("/:id", verifyToken, (req, res) => {
 //   });
 
 router.post("/", verifyToken, async (req, res) => {
-  const { userId, username, animeId, title, content} = req.body;
+  const { userId, username, animeName, animeId, title, content} = req.body;
 
   try {
     const existingcomment = await prisma.comment.findUnique({
@@ -79,6 +79,7 @@ router.post("/", verifyToken, async (req, res) => {
       data: {
         userId: userId,
         username: username,
+        animeName: animeName,
         animeId: animeId,
         title: title,
         content: content,
@@ -89,6 +90,43 @@ router.post("/", verifyToken, async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
+  });
+
+router.put("/:id", verifyToken, verifyUserOrAdmin, (req, res) => {
+    const id = req.params.id;
+    const { title, content } = req.body;
+    prisma.comment
+      .update({
+        where: {
+          id: id,
+        },
+        data: {
+          title: title,
+          content: content,
+        },
+      })
+      .then((data) => {
+        res.json(data);
+      })
+      .catch((error) => {
+        res.json({ error: error.message });
+      });
+  });
+
+router.delete("/:id", verifyUserOrAdmin, (req, res) => {
+    const id = req.params.id;
+    prisma.comment
+      .delete({
+        where: {
+          id: id,
+        },
+      })
+      .then((data) => {
+        res.json(data);
+      })
+      .catch((error) => {
+        res.json({ error: error.message });
+      });
   });
 
 export { router as commentRouter };

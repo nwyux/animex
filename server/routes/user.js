@@ -77,7 +77,7 @@ router.get("/users", verifyToken, verifyAdmin, (req, res) => {
     });
 });
 
-router.get("/user/:id", verifyToken, verifyUser, (req, res) => {
+router.get("/user/:id", verifyUserOrAdmin, (req, res) => {
   const { id } = req.params;
   prisma.user
     .findUnique({
@@ -108,6 +108,7 @@ router.get("/profile/:username", (req, res) => {
         username: username,
       },
       select: {
+        id: true,
         username: true,
         firstName: true,
         email: true,
@@ -194,7 +195,7 @@ router.post("/login", async (req, res) => {
 
 
 
-router.put("/user/:id", verifyToken, verifyUser, (req, res) => {
+router.put("/user/:id", verifyUserOrAdmin, (req, res) => {
   const { id } = req.params;
   const { username, password, firstName, lastName, email } = req.body;
   prisma.user
