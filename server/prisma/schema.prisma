@@ -47,6 +47,7 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   animeId   String
+  animeName String
   title     String
   content   String
 

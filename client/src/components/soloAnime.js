@@ -56,6 +56,7 @@ export default function SoloAnime() {
           userId: window.localStorage.getItem("userID"),
           username: window.localStorage.getItem("username"),
           animeId: id,
+          animeName: anime.attributes.titles.en_jp,
           title : title,
           content: content,
         },
