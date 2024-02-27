@@ -94,7 +94,7 @@ useEffect(() => {
 
                   {userData.username === window.localStorage.getItem("username") ? (
                     <button
-                      className="text-blanc flex items-center justify-center gap-1 hover:bg-green-600 text-xl bg-green-500 p-2 rounded-lg mt-4 w-1/2 mx-auto text-center"
+                      className="text-blanc flex items-center justify-center gap-1 hover:bg-green-600 text-xl bg-green-500 p-2 rounded-lg mt-4 w-48 mx-auto text-center"
                         onClick={() => setModalEditProfile(true)}
                     > 
                       <Settings /> Edit profile
@@ -103,7 +103,7 @@ useEffect(() => {
 
                   {window.localStorage.getItem("admin") === "true" ? (
                     <button 
-                    className="text-blanc flex items-center justify-center gap-1 hover:bg-red-500 text-xl bg-red-400 p-2 rounded-lg mt-4 w-1/2 mx-auto text-center"
+                    className="text-blanc flex items-center justify-center gap-1 hover:bg-red-500 text-xl bg-red-400 p-2 rounded-lg mt-4 w-48 mx-auto text-center"
                     onClick={() => setModalAdminPanel(true)}
                     >
                       <UserRoundCog /> Admin Options
