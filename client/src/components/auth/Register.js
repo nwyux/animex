@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
 import { NavLink } from "react-router-dom";
 import PageTemplate from "../PageTemplate";
+import Notification from "../Notification";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -18,6 +19,14 @@ export default function Register() {
   const [userID, setUserID] = useState("");
   const navigate = useNavigate();
   const apiURL = process.env.REACT_APP_API_URL;
+  const [notification, setNotification] = useState(false);
+
+  const notify = (color, message) => {
+    setNotification({ color, message });
+    setTimeout(() => {
+      setNotification(false);
+    }, 6500);
+  };
 
   async function register(e) {
     e.preventDefault();
@@ -31,8 +40,9 @@ export default function Register() {
             password: password,
             })
     ).data;
-    setLoading(false);
-    setRegistered(true);
+
+    console.log(response);
+
     if (response.error) {
       setError(response.error);
     } else {
@@ -44,17 +54,30 @@ export default function Register() {
       setRegistered(true);
       setUserID(response.userID);
 
-      window.localStorage.setItem("userID", response.userID);
-      window.localStorage.setItem("admin", response.admin);
-      window.localStorage.setItem("username", response.username);
+      if (response.message) {
+        notify("bg-red-500", response.message);
+      }
 
-      navigate("/user");
+      if (response.admin) {
+        window.localStorage.setItem("admin", response.admin);
+      }
+
+      if (response.userID) {
+        window.localStorage.setItem("userID", response.userID);
+      }
+
+      if (response.username) {
+        window.localStorage.setItem("username", response.username);
+        window.location.href = "/user/" + response.username;
+      }
     }
-  }
+    setLoading(false);
+}
 
   return (
     <div className="loginBg overflow-hidden flex h-screen relative justify-center items-center">
       <PageTemplate>
+        {notification && ( <Notification color={notification.color} message={notification.message} /> )}
       <div className="flex absolute top-64 z-20 justify-center bg-vert sm:bg-transparent rounded-full items-center mb-4">
         <NavLink
           to="/login"
