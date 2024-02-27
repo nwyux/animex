@@ -5,6 +5,9 @@ import useCookie from "react-use-cookie";
 import { NavLink } from "react-router-dom";
 import PageTemplate from "../PageTemplate";
 import Notification from "../Notification";
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -78,71 +81,77 @@ export default function Register() {
     <div className="loginBg overflow-hidden flex h-screen relative justify-center items-center">
       <PageTemplate>
         {notification && ( <Notification color={notification.color} message={notification.message} /> )}
-      <div className="flex absolute top-64 z-20 justify-center bg-vert sm:bg-transparent rounded-full items-center mb-4">
-        <NavLink
-          to="/login"
-          className="text-2xl sm:hidden font-semibold py-4 px-6 text-vertfonce"
-        >
-          Login
-        </NavLink>
+      <div className="flex absolute top-64 z-20 justify-center bg-blanc sm:bg-transparent rounded-full items-center mb-4">
         <NavLink
           to="/register"
-          className="text-2xl sm:-mt-14 sm:text-4xl sm:bg-transparent font-semibold bg-vertfonce rounded-full py-4 px-11 text-blanc"
+          className="text-2xl sm:-mt-14 sm:text-4xl sm:bg-transparent font-semibold  rounded-full py-4 px-11 text-noir"
         >
           Register
         </NavLink>
       </div>
-      <div className="w-full sm:max-w-2xl p-4 bg-blanc sm:backdrop-blur-sm sm:border-2 sm:border-blanc sm:top-48 sm:bg-transparent absolute top-64 h-screen rounded-[45px]">
-        <form onSubmit={register} className="mt-24">
-          <input
-            type="text"
-            placeholder="Username"
-            className="w-full sm:bakcdrop-blur-sm sm:bg-[rgb(172,185,146)] sm:bg-opacity-70 shadow-xl p-3 mb-6 bg-vert text-vertfonce rounded-xl placeholder:text-vertfonce placeholder:text-xl placeholder:font-bold"
+      <div className="w-full sm:max-w-2xl p-4 bg-blanc sm:backdrop-blur-sm sm:border-2 sm:border-blanc sm:top-48 sm:bg-blanc sm:bg-opacity-65 absolute top-64 h-screen rounded-[45px]">
+        <Box 
+        component="form" noValidate onSubmit={register} 
+        className="mt-24 w-full max-w-lg m-auto grid gap-4 text-blanc"
+        autoComplete="off">
+          <TextField
+            id="outlined-controlled"
+            label="Username"
+            type="username"
+            required
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            className="mb-4"
           />
-
-          <input
+          <TextField
+            id="outlined-controlled"
+            label="First Name"
             type="text"
-            placeholder="First Name"
-            className="w-full sm:bakcdrop-blur-sm sm:bg-[rgb(172,185,146)] sm:bg-opacity-70 shadow-xl p-3 mb-6 bg-vert text-vertfonce rounded-xl placeholder:text-vertfonce placeholder:text-xl placeholder:font-bold"
+            required
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
+            className="mb-4"
           />
-
-        <input
+          <TextField
+            id="outlined-controlled"
+            label="Last Name"
             type="text"
-            placeholder="Last Name"
-            className="w-full sm:bakcdrop-blur-sm sm:bg-[rgb(172,185,146)] sm:bg-opacity-70 shadow-xl p-3 mb-6 bg-vert text-vertfonce rounded-xl placeholder:text-vertfonce placeholder:text-xl placeholder:font-bold"
+            required
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
+            className="mb-4"
           />
-
-          <input
+          <TextField
+            id="outlined-controlled"
+            label="Email"
             type="email"
-            placeholder="Email"
-            className="w-full sm:bakcdrop-blur-sm sm:bg-[rgb(172,185,146)] sm:bg-opacity-70 shadow-xl p-3 mb-6 bg-vert text-vertfonce rounded-xl placeholder:text-vertfonce placeholder:text-xl placeholder:font-bold"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="mb-4"
           />
-          <input
+          <TextField
+            id="outlined-controlled"
+            label="Password"
             type="password"
-            placeholder="Password"
-            className="w-full sm:bakcdrop-blur-sm sm:bg-[rgb(172,185,146)] sm:bg-opacity-70 shadow-xl p-3 mb-6 bg-vert text-vertfonce rounded-xl placeholder:text-vertfonce placeholder:text-xl placeholder:font-bold"
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="mb-4"
           />
-          <button
-            className="w-full p-3 mt-6 bg-vertfonce sm:bg-marron shadow-2xl text-blanc rounded-xl font-bold"
-            onClick={register}
-            disabled={loading}
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={username === "" || firstName === "" || lastName === "" || email === "" || password === ""}
+            className="bg-vertfonce text-blanc py-2 rounded-lg hover:bg-vert"
+            color={loading ? "secondary" : "primary"}
           >
-            Register
-          </button>
-        </form>
-        <div className="text-vertfonce flex gap-1 font-bold mt-4">
+            {loading ? "Loading..." : "Register"}
+          </Button>
+        </Box>
+        <div className="text-noir flex justify-center gap-1 font-bold mt-4 text-center">
           <p>You already have an account?</p>
-          <NavLink to="/login" className="text-vert hover:underline">
+          <NavLink to="/login" className="text-vertfonce hover:underline">
             Login here
           </NavLink>
         </div>
