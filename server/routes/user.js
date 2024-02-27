@@ -131,12 +131,35 @@ router.get("/profile/:username", (req, res) => {
     });
 });
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   const { username, password, firstName, lastName, email } = req.body;
   const salt = bcrypt.genSaltSync(10);
   const hash = bcrypt.hashSync(password, salt);
-  prisma.user
-    .create({
+
+    try {
+      const existingUser = await prisma.user.findUnique({
+        where: {
+          username: username,
+        },
+      });
+
+      if (existingUser) {
+        return res.json({ message: "Username already exists" });
+      }
+
+    // verify if email already exists
+    try {
+      const existingEmail = await prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+      });
+      
+      if (existingEmail) {
+        return res.json({ message: "Email already exists" });
+      }
+
+    const newUser = await prisma.user.create({
       data: {
         username,
         password: hash,
@@ -144,14 +167,17 @@ router.post("/register", (req, res) => {
         lastName,
         email,
       },
-    })
-    .then((data) => {
-      const token = jwt.sign({ id: data.id, admin: data.admin }, "secret");
-      res.json({ access_token: token, userID: data.id, admin: data.admin, username: data.username });
-    })
-    .catch((error) => {
-      res.json({ error: error.message });
     });
+    const token = jwt.sign({ id: newUser.id, admin: newUser.admin }, "secret");
+    res.json({ access_token: token, userID: newUser.id, admin: newUser.admin, username: newUser.username });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ message: "Internal server error" });
+}
 });
 
 router.post("/login", async (req, res) => {
@@ -166,13 +192,11 @@ router.post("/login", async (req, res) => {
 
     if (!user) {
       return res
-        .status(400)
         .json({ message: "Username or password is incorrect" });
     }
 
     if (!user.password) {
       return res
-        .status(500)
         .json({ message: "User data is invalid" });
     }
 
@@ -180,7 +204,6 @@ router.post("/login", async (req, res) => {
 
     if (!isPasswordValid) {
       return res
-        .status(400)
         .json({ message: "Username or password is incorrect" });
     }
 

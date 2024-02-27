@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import useCookie from 'react-use-cookie';
 import { NavLink } from 'react-router-dom';
 import PageTemplate from '../PageTemplate';
+import Notification from '../Notification';
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -15,6 +16,14 @@ export default function Login() {
     const [userID, setUserID] = useState('');
     const navigate = useNavigate()
     const apiURL = process.env.REACT_APP_API_URL;
+    const [notification, setNotification] = useState(false);
+
+    const notify = (color, message) => {
+        setNotification({ color, message });
+        setTimeout(() => {
+            setNotification(false);
+        }, 6500);
+    };
 
     async function login() {
         setLoading(true);
@@ -33,11 +42,23 @@ export default function Login() {
             setLogged(true);
             setUserID(response.userID);
 
-            window.localStorage.setItem('userID', response.userID);
-            window.localStorage.setItem('admin', response.admin);
-            window.localStorage.setItem('username', response.username);
+            if (response.message) {
+                notify('bg-red-500', response.message);
+            }
 
-            navigate('/user');
+            if (response.admin) {
+                window.localStorage.setItem('admin', response.admin);
+            }
+
+            if (response.userID) {
+                window.localStorage.setItem('userID', response.userID);
+            }
+
+            if (response.username) {
+                window.localStorage.setItem('username', response.username);
+                window.location.href = '/user' + response.username;
+            }
+
         }
         setLoading(false);
     }
@@ -45,6 +66,7 @@ export default function Login() {
     return (
         <div className="loginBg overflow-hidden flex h-screen relative justify-center items-center">
             <PageTemplate>
+                {notification && <Notification color={notification.color} message={notification.message} />}
             <div className='flex absolute top-64 z-20 justify-center bg-vert sm:bg-transparent rounded-full items-center mb-4'>
                 <NavLink to='/login' className="text-2xl sm:-mt-14  sm:text-4xl sm:bg-transparent font-semibold bg-vertfonce rounded-full py-4 px-11 text-blanc">Login</NavLink>
                 <NavLink to='/register' className="text-2xl sm:hidden font-semibold py-4 px-6 text-vertfonce">Register</NavLink>

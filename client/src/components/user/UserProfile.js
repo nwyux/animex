@@ -149,7 +149,9 @@ useEffect(() => {
                 <h2 className="text-2xl font-bold text-center mb-4">
                   Favorites
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                <div 
+                className={animeDataArray.length > 0 ? "grid grid-cols-2 gap-4" : "flex flex-col justify-center items-center gap-4"}
+                >
                   {animeDataArray.length > 0 ? (
                     animeDataArray.map((animeData) => {
                       return (
@@ -161,11 +163,11 @@ useEffect(() => {
                       );
                     })
                   ) : (
-                    <h1 className="text-4xl font-semibold text-blanc">
+                    <h1 className="text-xl text-center font-semibold text-stone-700">
                       No favorites found
                     </h1>
                   )}
-                  {/* div absolute button to see more to /favorites */}
+                    {animeDataArray.length > 0 ? (
                     <div className="flex rounded-b-xl justify-center absolute bottom-0 left-0 shadow-xl p-6 backdrop-blur-xl w-full bg-gradient-to-t from-blanc to-transparent">
                         <NavLink
                         to={`/favorites/`}
@@ -174,6 +176,7 @@ useEffect(() => {
                         See all favorites
                         </NavLink>
                     </div>
+                    ) : null}
                 </div>
               </div>
             </div>
